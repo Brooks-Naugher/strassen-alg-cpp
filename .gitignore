@@ -1,3 +1,4 @@
 *.exe
 .vscode/
 IgnoreGuide.txt
+strassen_test.cpp
