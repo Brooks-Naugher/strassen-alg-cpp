@@ -14,7 +14,7 @@
 std::vector<int> addMatrix(const std::vector<int>& matrixA, const std::vector<int>& matrixB){
     std::vector<int> resultMatrix(matrixA.size(), 0);
 
-    for(int i = 0; i < matrixA.size(); i++){
+    for(std::size_t i = 0; i < matrixA.size(); i++){
         resultMatrix[i] = matrixA[i] + matrixB[i];
     }
 
@@ -35,7 +35,7 @@ std::vector<int> addMatrix(const std::vector<int>& matrixA, const std::vector<in
 std::vector<int> subtractMatrix(const std::vector<int>& matrixA, const std::vector<int>& matrixB){
     std::vector<int> resultMatrix(matrixA.size(), 0);
 
-    for(int i = 0; i < matrixA.size(); i++){
+    for(std::size_t i = 0; i < matrixA.size(); i++){
         resultMatrix[i] = matrixA[i] - matrixB[i];
     }
 

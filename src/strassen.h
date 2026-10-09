@@ -32,7 +32,7 @@ std::vector<int> strassenMultiplyCornerOrder(const std::vector<int>& matrixA, co
             m22 = 13,14,15,16
     */
 
-    int numElements = matrixA.size();
+    std::size_t numElements = matrixA.size();
     std::vector<int> strassenResult;
 
     if(numElements == 1){
@@ -40,18 +40,17 @@ std::vector<int> strassenMultiplyCornerOrder(const std::vector<int>& matrixA, co
     }
     else if(numElements != 4){
 
-        int numCornerElements = numElements / 4;
+        std::size_t numCornerElements = numElements / 4;
         
         std::vector<int> a11, a12, a21, a22;
         std::vector<int> b11, b12, b21, b22;
         std::vector<int> m1, m2, m3, m4, m5, m6, m7;
         std::vector<int> c11, c12, c21, c22;
 
-        for(int i = 0; i < numElements; i++){
+        for(std::size_t i = 0; i < numElements; i++){
             if(i < numCornerElements){
                 a11.push_back(matrixA.at(i));
                 b11.push_back(matrixB.at(i));
-
             } 
             else if(i < numCornerElements * 2){
                 a12.push_back(matrixA.at(i));
@@ -139,7 +138,7 @@ std::vector<int> strassenMultiplyCornerOrder(const std::vector<int>& matrixA, co
 std::vector<int> strassenMultiplyRowOrder(const std::vector<int>& matrixA, const std::vector<int>& matrixB){
     
 
-    int numElements = matrixA.size();
+    std::size_t numElements = matrixA.size();
     std::vector<int> strassenResult;
 
     if(numElements == 1){
@@ -147,48 +146,46 @@ std::vector<int> strassenMultiplyRowOrder(const std::vector<int>& matrixA, const
     }
     else if(numElements != 4){
 
-        int numCornerElements = numElements / 4;
-        int numRowElementsNeeded = numCornerElements / 2;
+        std::size_t numCornerElements = numElements / 4;
         std::vector<int> a11, a12, a21, a22;
         std::vector<int> b11, b12, b21, b22;
         std::vector<int> m1, m2, m3, m4, m5, m6, m7;
         std::vector<int> c11, c12, c21, c22;
-        
-        /*
-            v = {1,2,3,4  5,6,7,8  9,10,11,12  13,14,15,16}
-                 0 1      4 5      8           12
-                
-            v = {1,2,3,4,5,6,7,8  1,2,3,4,5,6,7,8  1,2,3,4,5,6,7,8  1,2,3,4,5,6,7,8  1,2,3,4,5,6,7,8  1,2,3,4,5,6,7,8  1,2,3,4,5,6,7,8  1,2,3,4,5,6,7,8}
-        */     //a11 = 1 2 3 4 1 2 3 4 1 2 3 4 1 2 3 4
 
+        std::size_t rowNum = 1;
+        std::size_t counter = 0;
         
-    /*
-        for(int i = 0; i < numElements; i++){
-
+        for(std::size_t i = 0; i < numElements; i++){
             if(i < numElements/2){
-                bool isWithFirstRowElement11 = i < numCornerElements && i < numCornerElements / 2;
-                bool isWithSecondRowElemenet11 = i > numCornerElements && i < (numCornerElements*2 - numRowElementsNeeded );
-
-                bool 
-                if(isWithFirstRowElement11 || isWithSecondRowElemenet11){
+                bool isOfElement11 = i < (numCornerElements * rowNum) - (numCornerElements/2);
+                if(isOfElement11){
                     a11.push_back(matrixA.at(i));
                     b11.push_back(matrixB.at(i));
-                } else{
+                } 
+                else {
                     a12.push_back(matrixA.at(i));
-                    b12.push_back(matrixB.at(i));
+                    b12.push_back(matrixB.at(i));                }
+            }
+            else{
+                bool isOfElement21 = i < (numCornerElements * rowNum) - (numCornerElements/2);
+                if(isOfElement21){
+                    a21.push_back(matrixA.at(i));
+                    b21.push_back(matrixB.at(i));
                 }
-            } else{
-                bool isWithFirstRowA21 
-                bool isWithSecondRowA22
-                if(){
-
-                } else{
-                    
+                else{
+                    a22.push_back(matrixA.at(i));
+                    b22.push_back(matrixB.at(i));
                 }
             }
-        }
-    */
 
+            counter++;
+
+            if(counter == numCornerElements){
+                counter = 0;
+                rowNum++;
+            }
+        }
+    
     /*
         m1 = (a11 + a22) * (b11 + b22);
         m2 = (a21 + a22) * b11;
@@ -198,13 +195,13 @@ std::vector<int> strassenMultiplyRowOrder(const std::vector<int>& matrixA, const
         m6 = (a21 - a11) * (b11 + b12);
         m7 = (a12 - a22) * (b21 + b22);
     */
-        m1 = strassenMultiplyCornerOrder(addMatrix(a11, a22), addMatrix(b11, b22));
-        m2 = strassenMultiplyCornerOrder(addMatrix(a21, a22), b11);
-        m3 = strassenMultiplyCornerOrder(a11, subtractMatrix(b12, b22));
-        m4 = strassenMultiplyCornerOrder(a22, subtractMatrix(b21, b11));
-        m5 = strassenMultiplyCornerOrder(addMatrix(a11, a12), b22);
-        m6 = strassenMultiplyCornerOrder(subtractMatrix(a21,a11), addMatrix(b11, b12));
-        m7 = strassenMultiplyCornerOrder(subtractMatrix(a12, a22), addMatrix(b21, b22));
+        m1 = strassenMultiplyRowOrder(addMatrix(a11, a22), addMatrix(b11, b22));
+        m2 = strassenMultiplyRowOrder(addMatrix(a21, a22), b11);
+        m3 = strassenMultiplyRowOrder(a11, subtractMatrix(b12, b22));
+        m4 = strassenMultiplyRowOrder(a22, subtractMatrix(b21, b11));
+        m5 = strassenMultiplyRowOrder(addMatrix(a11, a12), b22);
+        m6 = strassenMultiplyRowOrder(subtractMatrix(a21,a11), addMatrix(b11, b12));
+        m7 = strassenMultiplyRowOrder(subtractMatrix(a12, a22), addMatrix(b21, b22));
 
     /*
         c11 = m1 + m4 - m5 + m7;
@@ -216,11 +213,15 @@ std::vector<int> strassenMultiplyRowOrder(const std::vector<int>& matrixA, const
         c12 = addMatrix(m3, m5);
         c21 = addMatrix(m2, m4);
         c22 = subtractMatrix(addMatrix(addMatrix(m1,m3),m6), m2);
+       
+       
+        int counter = 0;
+        int subMatrixRowSize = std::sqrt(numCornerElements);
+        bool notDone = true;
 
-        strassenResult.insert(strassenResult.end(), c11.begin(), c11.end());
-        strassenResult.insert(strassenResult.end(), c12.begin(), c12.end());
-        strassenResult.insert(strassenResult.end(), c21.begin(), c21.end());
-        strassenResult.insert(strassenResult.end(), c22.begin(), c22.end());
+        while(notDone){
+            
+        }
     }
     else{
 
