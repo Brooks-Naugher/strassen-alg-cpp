@@ -1,4 +1,5 @@
 *.exe
 .vscode/
 IgnoreGuide.txt
-strassen_test.cpp
+*.cpp
+*.o
