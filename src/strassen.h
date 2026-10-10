@@ -1,9 +1,66 @@
 #include <vector>
 #include <cmath>
+#include <type_traits>
 #include "matrix_operations.h"
 
 //https://en.wikipedia.org/wiki/Strassen_algorithm
 
+
+/**
+ * @brief Checks if a matrix can be multiplied with Strassen Algorithm.
+ * 
+ * Checks if log2 of square root of number of elements in
+ * the matrix is a whole number, if it isn't, then the width/length 
+ * is not a power of 2 and/or square.
+ * 
+ * @param matrix1D 
+ * @return bool
+ * 
+ */
+bool isStrassenMultipliable1d(std::vector<int>& matrix1D){
+    
+    size_t size = matrix1D.size();
+    
+    if(size == 0){
+        return false;
+    }
+
+    if(std::fmod(std::log2(sqrt(size)), 1.0) != 0 ){
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * @brief Checks if two matrices can be multiplied with Strassen Algorithm with eachother.
+ * 
+ * Checks if size of matrices are same and that both matrices meet requirements of being
+ * Strassen multipliable.
+ * 
+ * @param matrixA 
+ * @param matrixB 
+ * @return bool
+ * 
+ */
+bool areBothStrassenMultipliable(std::vector<int>& matrixA, std::vector<int>& matrixB){
+    size_t matrixASize = matrixA.size();
+    size_t matrixBSize = matrixB.size();
+
+    bool areSameSize = matrixASize == matrixBSize;
+    if(!areSameSize){
+        return false;
+    }
+
+    bool areStrassenMultipliable = isStrassenMultipliable1d(matrixA) && isStrassenMultipliable1d(matrixB);
+    
+    if(!areStrassenMultipliable){
+        return false; 
+    }
+
+    return true;
+
+}
 /**
  * @brief Multiplies two corner ordered matrices using Strassen Algorithm.
  * 
