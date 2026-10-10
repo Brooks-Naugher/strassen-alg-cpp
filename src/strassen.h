@@ -5,13 +5,13 @@
 //https://en.wikipedia.org/wiki/Strassen_algorithm
 
 /**
- * @brief Multiplies two matrices using Strassen Algorithm.
+ * @brief Multiplies two corner ordered matrices using Strassen Algorithm.
  * 
  * Multiplies two same-sized, Strassen multipliable
  * matrices. The matrices are in "Corner Order".
  * Corner Order Matrix  looks like this: If
         m = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
-        Then: 
+        Then each corner: 
         m11 = 1,2,3,4 | 
         m12 = 4,6,7,8 | 
         m21 = 9,10,11,12 | 
@@ -135,11 +135,30 @@ std::vector<int> strassenMultiplyCornerOrder(const std::vector<int>& matrixA, co
         
 }
 
+
+/**
+ * @brief Multiplies two row ordered matrices using Strassen Algorithm.
+ * 
+ * Multiplies two same-sized, Strassen multipliable
+ * matrices. The matrices are in "Row Order".
+ * Row Order Matrix  looks like this: If
+        m = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+        Each Row: 
+        m1 = 1,2,3,4 | 
+        m2 = 4,6,7,8 | 
+        m3 = 9,10,11,12 | 
+        m4 = 13,14,15,16
+    @param matrixA
+    @param matrixB
+    @return matrixC - multiplied result of matrixA and matrixB
+
+ */
+
 std::vector<int> strassenMultiplyRowOrder(const std::vector<int>& matrixA, const std::vector<int>& matrixB){
     
 
     std::size_t numElements = matrixA.size();
-    std::vector<int> strassenResult;
+    std::vector<int> strassenResult(numElements, 0);
 
     if(numElements == 1){
         strassenResult = {matrixA.at(0)*matrixB.at(0)};
@@ -215,13 +234,22 @@ std::vector<int> strassenMultiplyRowOrder(const std::vector<int>& matrixA, const
         c22 = subtractMatrix(addMatrix(addMatrix(m1,m3),m6), m2);
        
        
-        int counter = 0;
-        int subMatrixRowSize = std::sqrt(numCornerElements);
-        bool notDone = true;
+        //index = (Row x Total Width) + Column
+        size_t halfResultWidth = sqrt(numCornerElements);
+        size_t resultWidth = halfResultWidth * 2; 
 
-        while(notDone){
-            
+        for (size_t row = 0; row < halfResultWidth; ++row) {
+            for (size_t col = 0; col < halfResultWidth; ++col) {
+                
+                size_t subIdx = row * halfResultWidth + col;
+
+                strassenResult.at(row * resultWidth + col) = c11.at(subIdx);
+                strassenResult.at(row * resultWidth + (col + halfResultWidth)) = c12.at(subIdx);
+                strassenResult.at((row + halfResultWidth) * resultWidth + col) = c21.at(subIdx);
+                strassenResult.at((row + halfResultWidth) * resultWidth + (col + halfResultWidth)) = c22.at(subIdx);
+            }
         }
+        
     }
     else{
 
