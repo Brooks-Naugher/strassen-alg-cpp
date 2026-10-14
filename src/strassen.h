@@ -25,6 +25,7 @@ bool isStrassenMultipliable1D(std::vector<int>& matrix1D){
         return false;
     }
 
+    //is not a square of 2
     if(std::fmod(std::log2(sqrt(size)), 1.0) != 0 ){
         return false;
     }
@@ -61,6 +62,7 @@ bool areBothStrassenMultipliable1D(std::vector<int>& matrixA, std::vector<int>& 
     return true;
 
 }
+
 /**
  * @brief Multiplies two corner ordered matrices using Strassen Algorithm.
  * 
@@ -93,7 +95,7 @@ std::vector<int> strassenMultiplyCornerOrder(const std::vector<int>& matrixA, co
     std::vector<int> strassenResult;
 
     if(numElements == 1){
-        strassenResult = {matrixA.at(0)*matrixB.at(0)};
+        strassenResult = {matrixA[0]*matrixB[0]};
     }
     else if(numElements != 4){
 
@@ -106,20 +108,20 @@ std::vector<int> strassenMultiplyCornerOrder(const std::vector<int>& matrixA, co
 
         for(std::size_t i = 0; i < numElements; i++){
             if(i < numCornerElements){
-                a11.push_back(matrixA.at(i));
-                b11.push_back(matrixB.at(i));
+                a11.push_back(matrixA[i]);
+                b11.push_back(matrixB[i]);
             } 
             else if(i < numCornerElements * 2){
-                a12.push_back(matrixA.at(i));
-                b12.push_back(matrixB.at(i));
+                a12.push_back(matrixA[i]);
+                b12.push_back(matrixB[i]);
             }
             else if(i < numCornerElements * 3){
-                a21.push_back(matrixA.at(i));
-                b21.push_back(matrixB.at(i));
+                a21.push_back(matrixA[i]);
+                b21.push_back(matrixB[i]);
             }
             else{
-                a22.push_back(matrixA.at(i));
-                b22.push_back(matrixB.at(i)); 
+                a22.push_back(matrixA[i]);
+                b22.push_back(matrixB[i]); 
             }
         }
 
@@ -163,14 +165,14 @@ std::vector<int> strassenMultiplyCornerOrder(const std::vector<int>& matrixA, co
         int m1, m2, m3, m4, m5, m6, m7;
         int c11, c12, c21, c22;
 
-        a11 = matrixA.at(0);
-        b11 = matrixB.at(0);
-        a12 = matrixA.at(1);
-        b12 = matrixB.at(1);
-        a21 = matrixA.at(2);
-        b21 = matrixB.at(2);
-        a22 = matrixA.at(3);
-        b22 = matrixB.at(3);
+        a11 = matrixA[0];
+        b11 = matrixB[0];
+        a12 = matrixA[1];
+        b12 = matrixB[1];
+        a21 = matrixA[2];
+        b21 = matrixB[2];
+        a22 = matrixA[3];
+        b22 = matrixB[3];
 
         m1 = (a11 + a22) * (b11 + b22);
         m2 = (a21 + a22) * b11;
@@ -192,7 +194,6 @@ std::vector<int> strassenMultiplyCornerOrder(const std::vector<int>& matrixA, co
         
 }
 
-
 /**
  * @brief Multiplies two row ordered matrices using Strassen Algorithm.
  * 
@@ -210,7 +211,6 @@ std::vector<int> strassenMultiplyCornerOrder(const std::vector<int>& matrixA, co
     @return matrixC - multiplied result of matrixA and matrixB
 
  */
-
 std::vector<int> strassenMultiplyRowOrder(const std::vector<int>& matrixA, const std::vector<int>& matrixB){
     
 
@@ -218,7 +218,7 @@ std::vector<int> strassenMultiplyRowOrder(const std::vector<int>& matrixA, const
     std::vector<int> strassenResult(numElements, 0);
 
     if(numElements == 1){
-        strassenResult = {matrixA.at(0)*matrixB.at(0)};
+        strassenResult = {matrixA[0]*matrixB[0]};
     }
     else if(numElements != 4){
 
@@ -235,22 +235,22 @@ std::vector<int> strassenMultiplyRowOrder(const std::vector<int>& matrixA, const
             if(i < numElements/2){
                 bool isOfElement11 = i < (numCornerElements * rowNum) - (numCornerElements/2);
                 if(isOfElement11){
-                    a11.push_back(matrixA.at(i));
-                    b11.push_back(matrixB.at(i));
+                    a11.push_back(matrixA[i]);
+                    b11.push_back(matrixB[i]);
                 } 
                 else {
-                    a12.push_back(matrixA.at(i));
-                    b12.push_back(matrixB.at(i));                }
+                    a12.push_back(matrixA[i]);
+                    b12.push_back(matrixB[i]);                }
             }
             else{
                 bool isOfElement21 = i < (numCornerElements * rowNum) - (numCornerElements/2);
                 if(isOfElement21){
-                    a21.push_back(matrixA.at(i));
-                    b21.push_back(matrixB.at(i));
+                    a21.push_back(matrixA[i]);
+                    b21.push_back(matrixB[i]);
                 }
                 else{
-                    a22.push_back(matrixA.at(i));
-                    b22.push_back(matrixB.at(i));
+                    a22.push_back(matrixA[i]);
+                    b22.push_back(matrixB[i]);
                 }
             }
 
@@ -300,10 +300,10 @@ std::vector<int> strassenMultiplyRowOrder(const std::vector<int>& matrixA, const
                 
                 size_t subIdx = row * halfResultWidth + col;
 
-                strassenResult.at(row * resultWidth + col) = c11.at(subIdx);
-                strassenResult.at(row * resultWidth + (col + halfResultWidth)) = c12.at(subIdx);
-                strassenResult.at((row + halfResultWidth) * resultWidth + col) = c21.at(subIdx);
-                strassenResult.at((row + halfResultWidth) * resultWidth + (col + halfResultWidth)) = c22.at(subIdx);
+                strassenResult[row * resultWidth + col] = c11[subIdx];
+                strassenResult[row * resultWidth + (col + halfResultWidth)] = c12[subIdx];
+                strassenResult[(row + halfResultWidth) * resultWidth + col] = c21[subIdx];
+                strassenResult[(row + halfResultWidth) * resultWidth + (col + halfResultWidth)] = c22[subIdx];
             }
         }
         
@@ -315,14 +315,14 @@ std::vector<int> strassenMultiplyRowOrder(const std::vector<int>& matrixA, const
         int m1, m2, m3, m4, m5, m6, m7;
         int c11, c12, c21, c22;
 
-        a11 = matrixA.at(0);
-        b11 = matrixB.at(0);
-        a12 = matrixA.at(1);
-        b12 = matrixB.at(1);
-        a21 = matrixA.at(2);
-        b21 = matrixB.at(2);
-        a22 = matrixA.at(3);
-        b22 = matrixB.at(3);
+        a11 = matrixA[0];
+        b11 = matrixB[0];
+        a12 = matrixA[1];
+        b12 = matrixB[1];
+        a21 = matrixA[2];
+        b21 = matrixB[2];
+        a22 = matrixA[3];
+        b22 = matrixB[3];
 
         m1 = (a11 + a22) * (b11 + b22);
         m2 = (a21 + a22) * b11;
@@ -344,26 +344,41 @@ std::vector<int> strassenMultiplyRowOrder(const std::vector<int>& matrixA, const
 }
 
 
-/*
+/**
+ * @brief Multiplies two matrices using Strassen Algorithm
+ * 
+ * Multiplies two same-sized, Strassen multipliable
+ * matrices (2d Array). The matrices are in "Row Order".
+ * Row Order Matrix  looks like this: If
+        m = [ [1,2,3,4], [5,6,7,8], [9,10,11,12], [13,14,15,16] ]
+        Each Row: 
+        m1 = 1,2,3,4 | 
+        m2 = 4,6,7,8 | 
+        m3 = 9,10,11,12 | 
+        m4 = 13,14,15,16
+    @param matrixA
+    @param matrixB
+    @return matrixC - multiplied result of matrixA and matrixB
 
-
-*/
-
+ */
 std::vector<std::vector<int>> strassenMultiply2DVector(const std::vector<std::vector<int>>& matrixA, const std::vector<std::vector<int>>& matrixB){
 
     size_t numRows = matrixA.size();
     size_t numElements = numRows * numRows;
     std::vector<std::vector<int>> strassenResult;
 
-
-    if(numElements != 4){
+    if(numElements == 1){
+        strassenResult = {{matrixA[0][0]*matrixB[0][0]}};
+    }
+    else if(numElements != 4){
 
         std::vector<std::vector<int>> a11, a12, a21, a22;
         std::vector<std::vector<int>> b11, b12, b21, b22;
         std::vector<std::vector<int>> m1, m2, m3, m4, m5, m6, m7;
         std::vector<std::vector<int>> c11, c12, c21, c22;
 
-        size_t rowSize = matrixA.at(0).size();
+        std::size_t rowSize = matrixA[0].size();
+
 
         for(size_t i =  0; i < numRows; i++){
 
@@ -372,12 +387,12 @@ std::vector<std::vector<int>> strassenMultiply2DVector(const std::vector<std::ve
             for(std::size_t j = 0; j < rowSize; j++){
 
                 if(j < rowSize / 2){
-                    aFirst.push_back(matrixA.at(i).at(j));
-                    bFirst.push_back(matrixB.at(i).at(j));
+                    aFirst.push_back(matrixA[i][j]);
+                    bFirst.push_back(matrixB[i][j]);
                 }
                 else{
-                    aSecond.push_back(matrixA.at(i).at(j));
-                    bSecond.push_back(matrixB.at(i).at(j));
+                    aSecond.push_back(matrixA[i][j]);
+                    bSecond.push_back(matrixB[i][j]);
                 }
             }
 
@@ -425,20 +440,22 @@ std::vector<std::vector<int>> strassenMultiply2DVector(const std::vector<std::ve
             c21 = add2dMatrices(m2, m4);
             c22 = add2dMatrices(subtract2dMatrices(m1, m2), add2dMatrices(m3, m6));
             
-            for(size_t i = 0; i < c11.size(); i++){
-                std::vector<int> row(c11.size() * 2, 0);
-                for(size_t j = 0; j < c11.at(0).size(); j++){
-                    row.at(j) = c11.at(i).at(j);
-                    row.at(j + c11.size()) = c12.at(i).at(j);
+            std::size_t cornerSideSize = c11.size();
+
+            for(size_t i = 0; i < cornerSideSize; i++){
+                std::vector<int> row(rowSize, 0);
+                for(size_t j = 0; j < cornerSideSize; j++){
+                    row[j] = c11[i][j];
+                    row[j + cornerSideSize] = c12[i][j];
                 }
                 strassenResult.push_back(row);
             }
 
-            for(size_t i = 0; i < c21.size(); i++){
-                std::vector<int> row(c21.size() * 2, 0);
-                for(size_t j = 0; j < c21.at(0).size(); j++){
-                    row.at(j) = c21.at(i).at(j);
-                    row.at(j + c22.size()) = c22.at(i).at(j);
+            for(size_t i = 0; i < cornerSideSize; i++){
+                std::vector<int> row(rowSize, 0);
+                for(size_t j = 0; j < cornerSideSize; j++){
+                    row[j] = c21[i][j];
+                    row[j + cornerSideSize] = c22[i][j];
                 }
                 strassenResult.push_back(row);
             }
@@ -451,14 +468,14 @@ std::vector<std::vector<int>> strassenMultiply2DVector(const std::vector<std::ve
         int m1, m2, m3, m4, m5, m6, m7;
         int c11, c12, c21, c22;
 
-        a11 = matrixA.at(0).at(0);
-        b11 = matrixB.at(0).at(0);
-        a12 = matrixA.at(0).at(1);
-        b12 = matrixB.at(0).at(1);
-        a21 = matrixA.at(1).at(0);
-        b21 = matrixB.at(1).at(0);
-        a22 = matrixA.at(1).at(1);
-        b22 = matrixB.at(1).at(1);
+        a11 = matrixA[0][0];
+        b11 = matrixB[0][0];
+        a12 = matrixA[0][1];
+        b12 = matrixB[0][1];
+        a21 = matrixA[1][0];
+        b21 = matrixB[1][0];
+        a22 = matrixA[1][1];
+        b22 = matrixB[1][1];
 
         m1 = (a11 + a22) * (b11 + b22);
         m2 = (a21 + a22) * b11;
